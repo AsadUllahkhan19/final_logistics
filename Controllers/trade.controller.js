@@ -265,21 +265,21 @@ const getFreightCharges = async (req, res) => {
   }
 }
 
-const getPostalCode = async (req, res) => {
+const getPostalCode = async (req, res)=> {
   try {
     const { city } = req.params;
-
-    const res = await axios.get(`http://api.geonames.org/postalCodeSearchJSON?placename=${city}&maxRows=100&username=${'talal22'}`)
-    const ZCArr = res.data.postalCodes.map((e, i) => e.postalCode);
+    console.log('jjjjj', city)
+    const resp = await axios.get(`http://api.geonames.org/postalCodeSearchJSON?placename=${city}&maxRows=100&username=${'talal22'}`)
+    const ZCArr = resp.data.postalCodes.map((e, i) => e.postalCode);
     const ZCSet = new Set(ZCArr);
 
     const postalData = (Array.from(ZCSet).map((e, i) => ({ value: `${city} - ${e}`, label: `${city} - ${e}`, })));
-    res.status(200).send({ message: 'success', data: postalData })
+    res.json({ message: 'success', data: postalData })
 
 
   } catch (error) {
     console.log(error)
-    res.status(400).send({ message: error.name })
+    res.json({ message: error.name })
   }
 }
 
