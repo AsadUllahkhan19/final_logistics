@@ -2,15 +2,15 @@ const Trade = require("../models/trade.model");
 const country = require("../models/country.model");
 const ShipperDetail = require("../models/shipperDetail.model");
 const ReceiverDetail = require("../models/receiverDetail.model");
-const AirExpressTransportServices = require('../models/transportCompanyAirExpress.model')
+const AirExpressTransportServices =require('../models/transportCompanyAirExpress.model')
 const Price = require("../models/pricing.model")
 const Airport = require("../models/airport.model")
 const Airline = require("../models/airline.model")
-const AirFreightCharges = require("../models/airfreightcharge.model")
+const AirFreightCharges=require("../models/airfreightcharge.model")
 
-const airExpressImportDHL = require("../models/airexpressimportDHL.model")
-const airExpressExportDHL = require("../models/airexpressexportDHL.model")
-const airExpressImportMWL = require("../models/airexpressimportMWL.model")
+const airExpressImportDHL=require("../models/airexpressimportDHL.model")
+const airExpressExportDHL=require("../models/airexpressexportDHL.model")
+const airExpressImportMWL =require("../models/airexpressimportMWL.model")
 const mongoose = require("mongoose");
 const { ObjectId } = require('mongoose').Types;
 
@@ -27,49 +27,49 @@ const tradeStepOne = async (req, res) => {
   }
 };
 const tradeStepTwo = async (req, res) => {
-  try {
-    const { tradeId, shipperData } = req.body;
-
-    const shipper = new ShipperDetail(shipperData);
-
-    const savedShipper = await shipper.save();
-
-    await Trade.findByIdAndUpdate(tradeId, { shipperId: savedShipper._id });
-
-    res.status(200).json({ message: "Step 2 done successfully" });
-  } catch (error) {
-    res.status(500).json({ error: "An error occurred" });
+    try {
+        const { tradeId, shipperData } = req.body;
+    
+        const shipper = new ShipperDetail(shipperData);
+    
+        const savedShipper = await shipper.save();
+    
+        await Trade.findByIdAndUpdate(tradeId, { shipperId: savedShipper._id });
+    
+        res.status(200).json({ message: "Step 2 done successfully" });
+      } catch (error) {
+        res.status(500).json({ error: "An error occurred" });
+      }
+  };
+  
+  const tradeStepThree =async(req,res)=>{
+    try{
+        const {tradeId,receiverData}=req.body;
+        const receiver = new ReceiverDetail(receiverData);
+        const savedReceiver = await receiver.save();
+        await Trade.findByIdAndUpdate(tradeId,{receiverId:savedReceiver._id});
+        res.status(200).json({ message: "Step 3 done successfully" });
+    }
+    catch(err){
+        res.status(500).json({ error: "An error occurred" });
+    }
   }
-};
 
-const tradeStepThree = async (req, res) => {
-  try {
-    const { tradeId, receiverData } = req.body;
-    const receiver = new ReceiverDetail(receiverData);
-    const savedReceiver = await receiver.save();
-    await Trade.findByIdAndUpdate(tradeId, { receiverId: savedReceiver._id });
-    res.status(200).json({ message: "Step 3 done successfully" });
-  }
-  catch (err) {
-    res.status(500).json({ error: "An error occurred" });
-  }
-}
+  
+const tradeStepFour =async(req,res)=>{
 
-
-const tradeStepFour = async (req, res) => {
-
-  try {
-    const { tradeId, natureofpackage, noofpackages, totalWeight, totalCbm, totalVolumetricWeight, tradeItem, chargeableWeight, locationPrice, paymentTypeFreight } = req.body;
-    const price = new Price({ locationPrice })
+  try{
+    const {tradeId,natureofpackage,noofpackages,totalWeight,totalCbm,totalVolumetricWeight,tradeItem,chargeableWeight,locationPrice,paymentTypeFreight}=req.body;
+    const price = new Price({locationPrice})
     const savedData = await price.save();
-    await Trade.findByIdAndUpdate(tradeId, { priceId: savedData._id, natureofpackage: natureofpackage, noofpackages: noofpackages, totalWeight: totalWeight, totalCbm: totalCbm, totalVolumetricWeight: totalVolumetricWeight, tradeItem: tradeItem, chargeableWeight: chargeableWeight, paymentTypeFreight: paymentTypeFreight })
-
-    console.log(savedData?._id)
+    await Trade.findByIdAndUpdate(tradeId,{priceId:savedData._id,natureofpackage:natureofpackage,noofpackages:noofpackages,totalWeight:totalWeight,totalCbm:totalCbm,totalVolumetricWeight:totalVolumetricWeight,tradeItem:tradeItem,chargeableWeight:chargeableWeight,paymentTypeFreight:paymentTypeFreight})
+    
+   console.log(savedData?._id)
     res
-      .status(200)
-      .json({ message: "Step 4 done successfully", priceId: savedData?._id });
+    .status(200) 
+    .json({ message: "Step 4 done successfully", priceId: savedData?._id });
   }
-  catch (error) {
+  catch(error){
     res.status(500).json({ error: "An error occurred during step 4" });
 
   }
@@ -91,7 +91,7 @@ const getAllCountryName = async (req, res) => {
   try {
     const data = await country.find().lean();
 
-    if (data.length === 0) {
+    if (data.length===0) {
       return res.status(404).json({ error: "No data found in the database" });
     }
 
@@ -155,22 +155,22 @@ const tradeCount = async (req, res) => {
 // };
 const getRate = async (req, res) => {
   try {
-    const { weight, country } = req.query;
+    const { weight, country} = req.query;
     const tradeType = parseInt(req.params.tradeType);
 
     console.log(tradeType);
-    console.log(weight);
+    console.log( weight);
 
     let data;
 
-    if (tradeType === 1) {
+    if (tradeType === 1 ) {
       const importDHLData = await airExpressImportDHL.findOne({ weight: weight }).lean();
       const importMWLData = await airExpressImportMWL.findOne({ weight: weight }).lean();
 
-      // console.log("importMWLData",importMWLData)
+// console.log("importMWLData",importMWLData)
       data = mergeData(importDHLData, importMWLData);
-    } else if (tradeType === 2) {
-
+    } else if (tradeType === 2 ) {
+ 
       data = await airExpressExportDHL.findOne({ weight: weight }).lean();
     } else {
       return res.status(400).json({ error: "Invalid tradeType or transport company" });
@@ -202,30 +202,29 @@ const mergeData = (...datasets) => {
 
 //get all airports, if a country is given then get all airports of that country
 
-const getAllAirport = async (req, res) => {
+const getAllAirport=async (req,res)=>{
   try {
-    const { country } = req.params;
+    const {country}=req.query;
     const data = await Airport.find().lean();
 
     if (!country) {
-      const airports = data.map(airport => airport.airportcity)
+      const airports=data.map(airport=>airport.airportcity)
       res.send(airports).status(200)
     }
-    else {
-      (country)
-      const countryAirports = data.filter(airport => airport.country === country).map(airport => airport.airportcity)
-      res.send(countryAirports).status(200)
+    else{(country)
+    const countryAirports=data.filter(airport=>airport.country===country).map(airport=>airport.airportcity)
+    res.send(countryAirports).status(200)
     }
-  } catch (err) {
-    res.status(500).json({ error: "An error occurred while fetching data" });
-    console.log(err)
-  }
+} catch(err){
+  res.status(500).json({ error: "An error occurred while fetching data" });
+  console.log(err)
 }
-const getAirline = async (req, res) => {
+}
+const getAirline=async (req,res)=>{
   try {
     const data = await Airline.find().lean();
 
-    if (data.length === 0) {
+    if (data.length===0) {
       return res.status(404).json({ error: "No data found in the database" });
     }
 
@@ -239,28 +238,27 @@ const getAirline = async (req, res) => {
   }
 }
 
-const getFreightCharges = async (req, res) => {
-  try {
-    const { termofshipment, chargeableweight } = req.params;
-    const data = await AirFreightCharges.findOne({ termofshipment: termofshipment }).lean();
-    const result = (({ _id, termofshipment, ...rest }) => rest)(data);
-    //console.log(result)
-    let totalprice = 0
-
-    for (const key in result) {
-      const rate = result[key].rateperkg;
-      const minimum = result[key].minimum;
-
-      const price = Math.max(chargeableweight * rate, minimum);
-      totalprice = totalprice + price
-    }
-
-    res.status(200).json({ "price": totalprice, "data": data })
-
-  }
-  catch (err) {
-    console.log(err)
-  }
+const getFreightCharges=async(req,res)=>{
+  try{
+   const{ termofshipment,chargeableweight}=req.params;
+   const data = await AirFreightCharges.findOne({termofshipment:termofshipment}).lean();   
+   const result = (({ _id, termofshipment, ...rest }) => rest)(data);
+   //console.log(result)
+ let totalprice=0
+ 
+ for (const key in result) {
+     const rate = result[key].rateperkg;
+     const minimum = result[key].minimum;
+ 
+     const price = Math.max(chargeableweight * rate, minimum);
+     totalprice=totalprice+price}
+ 
+ res.status(200).json({"price":totalprice,"data":data})
+ 
+ }
+ catch(err){
+console.log(err)
+ }
 }
 
 
