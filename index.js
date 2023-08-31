@@ -11,11 +11,11 @@ const yaml = require('yamljs')
 // const swaggerUI = require('swagger-ui-express')
 const {errorHandler} = require('./handler/errorHandler')
 
-
+app.use(cors('*'));
 // app.use('/api/docs',swaggerUI.serve,swaggerUI.setup(swaggerJsdoc))
 app.set('view engine','ejs')
 app.use(morgan('dev'))
-app.use(cors({ origin: true, credentials: true }));
+
 app.use(express.json());
 
 app.use('/users', users);
