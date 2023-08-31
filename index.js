@@ -7,12 +7,12 @@ const trade = require('./routes/trade')
 const morgan = require('morgan')
 const app = express();
 const yaml = require('yamljs')
-const swaggerJsdoc = yaml.load('./config/swagger.yaml')
-const swaggerUI = require('swagger-ui-express')
+// const swaggerJsdoc = yaml.load('./config/swagger.yaml')
+// const swaggerUI = require('swagger-ui-express')
 const {errorHandler} = require('./handler/errorHandler')
 
 
-app.use('/api/docs',swaggerUI.serve,swaggerUI.setup(swaggerJsdoc))
+// app.use('/api/docs',swaggerUI.serve,swaggerUI.setup(swaggerJsdoc))
 app.set('view engine','ejs')
 app.use(morgan('dev'))
 app.use(cors({ origin: true, credentials: true }));
