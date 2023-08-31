@@ -269,7 +269,7 @@ const getPostalCode = async (req, res) => {
   try {
     const { city } = req.params;
 
-    const res = await axios.get(`http://api.geonames.org/postalCodeSearchJSON?placename=${city}&maxRows=100&username=${APIKey}`)
+    const res = await axios.get(`http://api.geonames.org/postalCodeSearchJSON?placename=${city}&maxRows=100&username=${'talal22'}`)
     const ZCArr = res.data.postalCodes.map((e, i) => e.postalCode);
     const ZCSet = new Set(ZCArr);
 
