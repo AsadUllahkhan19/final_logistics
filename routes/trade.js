@@ -12,7 +12,7 @@ router.post("/stepFour",tradeController.tradeStepFour)
 router.get("/getAirExpressServiceData",tradeController.getAirExpressServiceData)
 router.get("/getCountryName",tradeController.getAllCountryName)
 router.get("/getRate/:tradeType",tradeController.getRate)
-router.get("/getAirport", tradeController.getAllAirport)
+router.get("/getAirport/:country", tradeController.getAllAirport)
 router.get("/getAirline", tradeController.getAirline)
 router.get("/getFreightCharges/:termofshipment/:chargeableweight", tradeController.getFreightCharges)
 

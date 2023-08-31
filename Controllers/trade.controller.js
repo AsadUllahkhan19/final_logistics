@@ -204,7 +204,7 @@ const mergeData = (...datasets) => {
 
 const getAllAirport = async (req, res) => {
   try {
-    const { country } = req.query;
+    const { country } = req.params;
     const data = await Airport.find().lean();
 
     if (!country) {
