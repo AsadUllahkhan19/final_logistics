@@ -15,11 +15,7 @@ router.get("/getRate/:tradeType",tradeController.getRate)
 router.get("/getAirport", tradeController.getAllAirport)
 router.get("/getAirline", tradeController.getAirline)
 router.get("/getFreightCharges/:termofshipment/:chargeableweight", tradeController.getFreightCharges)
-
-
-
-
-
+router.get("/getPostalCode/:city", tradeController.getPostalCode)
 
 // router.post("/snd",tradeController.tradeCount)
 // router.post("/getCountryZoneId",tradeController.getCountryZoneId)
